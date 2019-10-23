@@ -12,7 +12,7 @@ class GameBasic:
                     print("Zu viele Spieler")
                     raise
                 elif self.nrPlayer <= 0:
-                    print("Zu wenige Spieler")
+                    print("Zu wenige Spieler ")
                     raise
                 else:
                     break
