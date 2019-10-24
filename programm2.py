@@ -1,6 +1,8 @@
 ###hauptprogramm
 import random
+from analyse import *
 random.seed()
+
 
 class GameBasic:
     def __init__(self):
@@ -27,14 +29,14 @@ class GameBasic:
                 2. Würfeln auf Freireihe
                 3. Nur angesagte Reihe
                 -> """))
-                if self.mode == 1:
-                    playMode = "classic"
-                elif self.mode == 2:
-                    playMode = "free"
-                elif self.mode == 3:
-                    playMode = "said"
-                else:
-                    raise
+                # if self.mode == 1:
+                #     playMode = "classic"
+                # elif self.mode == 2:
+                #     playMode = "free"
+                # elif self.mode == 3:
+                #     playMode = "said"
+                # else:
+                    # raise
                 break
             except:
                 print("Falsche Eingabe, bitte einen Spielmodus wählen")
@@ -51,9 +53,10 @@ class GameBasic:
         return dic
 
 class Player:
-    def __init__(self, players, mode):
+    def __init__(self, players, mode, indiRolls):
         #ask for player names
         self.playerList = []
+        self.indiRolls = indiRolls
         for i in range(0,players):
             self.playerName = input("Name Spieler " + str(i+1) + ": ")
             self.playerList.append(self.playerName)
@@ -81,7 +84,7 @@ class Game:
         self.rolls = rolls
         self.startlist = startlist
 
-    def roll(self, player, secondRoll = None):
+    def roll(self, player, firstRoll = True):
         #first roll and return
         self.player = player
         self.dicelist = []
@@ -92,28 +95,32 @@ class Game:
         print(self.player + ", das ist dein Wurf:", end=" ")
         for item in self.dicelist:
             print(item, end=" ")
-        if secondRoll != None:
-            self.analyse2()
-        else:
-            self.analyse1()
+        self.analyse(self.dicelist)
 
-    def analyse1(self):
+    def analyse(self,dicelist):
+        self.dicelist = dicelist
         while True:
             try:
-                self.choise = int(input("""\n 1. Wurf - Was willst du machen: \n
+                choise = input("""\n Was willst du machen: \n
                 1: Alle neu werfen
                 2. Einzelne halten
                 3. Anschreiben
                 4. Angesagt
-                -> """))
-                if self.choise == 1:
-                    self.roll(self.player, secondRoll="yes")
-                elif self.choise == 2:
-                    self.hold = input("""Was willst du halten:
-                    -> """)
-                elif self.choise == 3:
-                    print("Was schreiben")
-                elif self.choise == 4:
+                -> """)
+                if choise == "1":
+                    self.roll(self.player)
+                elif choise == "2":
+                    hold = input("Was willst du halten: -> ")
+                elif choise == "3":
+                    go = Auswertung(self.dicelist)
+                    print(self.dicelist)
+                    print("Was schreiben: ", end= " ")
+                    select = input("1, 2, 3, 4, 5, 6, maxmin, kenter, full, poker, sixty: ->")
+                    if select == "1":
+                        output = go.figures(select)
+                        print(output)
+                        break
+                elif choise == "4":
                     print("Angesagt aktiviert")
                 else:
                     raise
@@ -121,34 +128,35 @@ class Game:
             except:
                 print("Falsche Eingabe")
 
-    def analyse2(self):
-        while True:
-            try:
-                self.choise = int(input("""\n 2. Wurf - Was willst du machen: \n
-                1: Alle neu werfen
-                2. Einzelne halten
-                3. Anschreiben
-                -> """))
-                if self.choise == 1:
-                    self.roll(self.player, secondRoll="yes")
-                elif self.choise == 2:
-                    self.hold = input("""Was willst du halten:
-                    -> """)
-                elif self.choise == 3:
-                    schreiben =
-                    self.schreiben(self.dicelist)
-                else:
-                    raise
-                break
-            except:
-                print("Falsche Eingabe")
+    # def analyse2(self):
+    #     while True:
+    #         try:
+    #             self.choise = int(input("""\n 2. Wurf - Was willst du machen: \n
+    #             1: Alle neu werfen
+    #             2. Einzelne halten
+    #             3. Anschreiben
+    #             -> """))
+    #             if self.choise == 1:
+    #                 self.roll(self.player, secondRoll="yes")
+    #             elif self.choise == 2:
+    #                 self.hold = input("""Was willst du halten:
+    #                 -> """)
+    #             elif self.choise == 3:
+    #                 schreiben = analyse.Auswertung(self.dicelist)
+    #                 self.schreiben(self.dicelist)
+    #             else:
+    #                 raise
+    #             break
+    #         except:
+    #             print("Falsche Eingabe")
+
 
 #create basic game configuration
 config = GameBasic()
 configDict = config.gameConfig()
 
 #output to users, ready to start the game
-player = Player(configDict[0], configDict[1])
+player = Player(configDict[0], configDict[1], configDict[2])
 
 #analyse starting player and output
 startlist = player.sequence()
