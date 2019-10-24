@@ -135,7 +135,8 @@ class Game:
                     self.hold = input("""Was willst du halten:
                     -> """)
                 elif self.choise == 3:
-                    print("Was schreiben")
+                    schreiben =
+                    self.schreiben(self.dicelist)
                 else:
                     raise
                 break
