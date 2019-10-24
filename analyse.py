@@ -1,4 +1,5 @@
 #analyse rolls
+from collections import Counter
 
 class Auswertung:
     def __init__(self, list):
@@ -26,20 +27,26 @@ class Auswertung:
             return 0
 
     def full(self):
+        most = Counter(self.list)
+        most = most.most_common(1)[0][0]
         if len(self.dict.keys()) == 2:
             if 4 not in self.dict.values():
-                return 40
+                return 40 + 3 * most
             else:
                 return 0
         elif 5 in self.dict.values():
-            return 40
+            return 40 + 3 * most
         else:
             return 0
 
     def poker(self):
+        most = Counter(self.list)
+        most = most.most_common(1)[0][0]
         if len(self.dict.keys()) == 2:
             if 4 in self.dict.values():
-                return 50
+                return 50 + 4 * most
+            else:
+                return 0
         else:
             return 0
 
@@ -52,7 +59,7 @@ class Auswertung:
     def druck(self):
         print(self.list, self.dict)
 
-list = [1,1,1,1,1]
+list = [2,2,2,2,1]
 s = Auswertung(list)
 output = s.full()
 output2 = s.kenter()
