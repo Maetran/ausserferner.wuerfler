@@ -9,9 +9,9 @@ class Auswertung:
             self.dict[i] = self.dict.get(i, 0) + 1
 
     def figures(self, key):
-        self.key = key
-        if self.key in dict.keys():
-            total = dict[self.key] * self.key
+        self.key = int(key)
+        if self.key in self.dict.keys():
+            total = self.dict[self.key] * self.key
             return total
         else:
             return 0
@@ -56,20 +56,7 @@ class Auswertung:
         else:
             return 0
 
-    def druck(self):
-        print(self.list, self.dict)
-
-list = [2,2,2,2,1]
-s = Auswertung(list)
-output = s.full()
-output2 = s.kenter()
-output3 = s.maxmin()
-output4 = s.poker()
-output5 = s.sixty()
-
-print(list)
-print("Full", output)
-print("Kenter", output2)
-print("MaxMin", output3)
-print("Poker", output4)
-print("Sechzig", output5)
+# list = [2,3,3,4,6]
+# d = Auswertung(list)
+# d1 = d.figures(2)
+# print(d1)
