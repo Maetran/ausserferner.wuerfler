@@ -6,8 +6,6 @@ random.seed()
 class GameBasic:
     def __init__(self):
         ###def nr of players
-        global writeIt
-        writeIt = Write()
         while True:
             try:
                 self.nrPlayer = int(input("Anzahl Spieler zwischen 1-4: "))
@@ -57,11 +55,19 @@ class GameBasic:
 class Player:
     def __init__(self, players, mode, indiRolls):
         #ask for player names
+        self.mainTable = {"1" : "", "2" : "", "3" : "", "4" : "",
+                    "5" : "", "6" : "", "min" : "", "max" : "",
+                    "kenter" : "", "full" : "", "poker" : "",
+                    "sixty": ""}
+        self.totalTable = {}
         self.playerList = []
         self.indiRolls = indiRolls
         for i in range(0,players):
             self.playerName = input("Name Spieler " + str(i+1) + ": ")
             self.playerList.append(self.playerName)
+            self.totalTable[self.playerName] = self.mainTable
+        global writeIt
+        writeIt = Write(self.totalTable)
 
         #define the starter in the playerList
         self.beginnerRoll = {}
@@ -77,6 +83,9 @@ class Player:
         self.playerList.remove(self.winner[1])
         self.rollOrder = self.rollOrder + self.playerList
         return self.rollOrder
+
+    def back(self):
+        return self.totalTable
 
 class Game:
     def __init__(self, nrPlayer, mode, rolls, startlist):
@@ -118,7 +127,7 @@ class Game:
             print("\n", self.player + ", das ist dein DRITTER Wurf:", end=" ")
             for item in self.dicelist:
                 print(item, end=" ")
-        self.analyse(self.dicelist, self.nrRoll)
+        self.analyse(self.dicelist, self.nrRoll, self.player)
 
     def rollPart(self, player, holdlist, nrRoll=1):
         self.player = player
@@ -134,17 +143,18 @@ class Game:
             print("\n", self.player + ", das ist dein ZWEITER Wurf:", end=" ")
             for item in self.holdlist:
                 print(item, end=" ")
-            self.analyse(self.holdlist, 2)
+            self.analyse(self.holdlist, 2, self.player)
         if nrRoll == 3:
             print("\n", self.player + ", das ist dein DRITTER Wurf:", end=" ")
             for item in self.holdlist:
                 print(item, end=" ")
             print("")
-            self.analyse(self.holdlist, 3)
+            self.analyse(self.holdlist, 3, self.player)
 
-    def analyse(self,dicelist,nrRoll):
+    def analyse(self,dicelist,nrRoll, player):
         self.dicelist = dicelist
         self.nrRoll = nrRoll
+        self.player = player
         while True:
             try:
                 if self.nrRoll == None:
@@ -197,7 +207,7 @@ class Game:
                             if select == "sixty":
                                 output = go.sixty()
                             while True:
-                                erg = writeIt.show(select, output)
+                                erg = writeIt.show(select, output, self.player)
                                 if erg != "error":
                                     break
                                 else:
@@ -255,7 +265,7 @@ class Game:
                             if select == "sixty":
                                 output = go.sixty()
                             while True:
-                                erg = writeIt.show(select, output)
+                                erg = writeIt.show(select, output, self.player)
                                 if erg != "error":
                                     break
                                 else:
@@ -281,7 +291,7 @@ class Game:
                     if select == "sixty":
                         output = go.sixty()
                     while True:
-                        erg = writeIt.show(select, output)
+                        erg = writeIt.show(select, output, self.player)
                         if erg != "error":
                             break
                         else:
@@ -293,19 +303,17 @@ class Game:
             except:
                 print("Falsche Eingabe")
 
-class Write:
-    def __init__(self):
-        self.table = {"1" : "", "2" : "", "3" : "", "4" : "",
-                    "5" : "", "6" : "", "min" : "", "max" : "",
-                    "kenter" : "", "full" : "", "poker" : "",
-                    "sixty": ""}
+class Write():
+    def __init__(self, totalTable):
+        self.totalTable = totalTable
 
-    def show(self, select, output):
+    def show(self, select, output, player):
         self.select = select
         self.output = output
-        if self.table[self.select] == "":
-            self.table[self.select] = self.output
-            print(self.table)
+        self.player = player
+        if self.totalTable[self.player][self.select] == "":
+            self.totalTable[self.player][self.select] = self.output
+            print(self.totalTable)
         else:
             print("Bereits vorhanden")
             return error
@@ -319,6 +327,7 @@ configDict = config.gameConfig()
 
 #output to users, ready to start the game
 player = Player(configDict[0], configDict[1], configDict[2])
+totalTable = player.back()
 
 #analyse starting player and output
 startlist = player.sequence()
