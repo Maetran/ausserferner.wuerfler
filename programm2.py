@@ -3,7 +3,6 @@ import random
 from analyse import *
 random.seed()
 
-
 class GameBasic:
     def __init__(self):
         ###def nr of players
@@ -138,6 +137,7 @@ class Game:
             print("\n", self.player + ", das ist dein DRITTER Wurf:", end=" ")
             for item in self.holdlist:
                 print(item, end=" ")
+            print("")
             self.analyse(self.holdlist, 3)
 
     def analyse(self,dicelist,nrRoll):
@@ -253,29 +253,23 @@ class Game:
                         raise("Falsche Auswahl Roll 2")
 
                 elif self.nrRoll == 3:
-                    choise = input("""\n Was willst du machen: \n
-                    1. Anschreiben
-                    -> """)
-                    if choise == "1":
-                        go = Auswertung(self.dicelist)
-                        print(self.dicelist)
-                        print("Was schreiben: ", end= " ")
-                        select = input("1, 2, 3, 4, 5, 6, maxmin, kenter, full, poker, sixty: ->")
-                        if select == "1" or select == "2" or select == "3" or select == "4" or select == "5" or select == "6":
-                            output = go.figures(select)
-                        if select == "maxmin":
-                            output = go.maxmin()
-                        if select == "kenter":
-                            output = go.kenter()
-                        if select == "full":
-                            output = go.full()
-                        if select == "poker":
-                            output = go.poker()
-                        if select == "sixty":
-                            output = go.sixty()
-                        print(output)
-                        break
-
+                    go = Auswertung(self.dicelist)
+                    print("Was schreiben: ", end= " ")
+                    select = input("1, 2, 3, 4, 5, 6, maxmin, kenter, full, poker, sixty: ->")
+                    if select == "1" or select == "2" or select == "3" or select == "4" or select == "5" or select == "6":
+                        output = go.figures(select)
+                    if select == "maxmin":
+                        output = go.maxmin()
+                    if select == "kenter":
+                        output = go.kenter()
+                    if select == "full":
+                        output = go.full()
+                    if select == "poker":
+                        output = go.poker()
+                    if select == "sixty":
+                        output = go.sixty()
+                    print(output)
+                    break
                 else:
                     raise
                 break
