@@ -59,8 +59,3 @@ class Auswertung:
             return 60 + sum(self.list)
         else:
             return 0
-
-# list = [2,3,3,4,6]
-# d = Auswertung(list)
-# d1 = d.figures(2)
-# print(d1)

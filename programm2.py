@@ -277,11 +277,13 @@ class Game:
                 elif self.nrRoll == 3:
                     go = Auswertung(self.dicelist)
                     print("Was schreiben: ", end= " ")
-                    select = input("1, 2, 3, 4, 5, 6, maxmin, kenter, full, poker, sixty: ->")
+                    select = input("1, 2, 3, 4, 5, 6, max, min, kenter, full, poker, sixty: ->")
                     if select == "1" or select == "2" or select == "3" or select == "4" or select == "5" or select == "6":
                         output = go.figures(select)
-                    if select == "maxmin":
-                        output = go.maxmin()
+                    if select == "max":
+                        output = go.max()
+                    if select == "min":
+                        output = go.min()
                     if select == "kenter":
                         output = go.kenter()
                     if select == "full":
@@ -309,6 +311,7 @@ class Write():
 
     def show(self, select, output, player):
         self.select = select
+        print(self.select)
         self.output = output
         self.player = player
         if self.totalTable[self.player][self.select] == "":
