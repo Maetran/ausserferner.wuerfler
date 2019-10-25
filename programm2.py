@@ -6,6 +6,8 @@ random.seed()
 class GameBasic:
     def __init__(self):
         ###def nr of players
+        global writeIt
+        writeIt = Write()
         while True:
             try:
                 self.nrPlayer = int(input("Anzahl Spieler zwischen 1-4: "))
@@ -43,9 +45,9 @@ class GameBasic:
 
         #def nr of total rolls depending on self.mode
         if self.mode == 1:
-            self.rolls = 1 #needs to be set to 48 after testing
+            self.rolls = 2 #needs to be set to 48 after testing
         else:
-            self.rolls = 1 #needs to be set to 12 after testing
+            self.rolls = 2 #needs to be set to 12 after testing
 
     #return fixed parameters of game
     def gameConfig(self):
@@ -141,8 +143,8 @@ class Game:
             self.analyse(self.holdlist, 3)
 
     def analyse(self,dicelist,nrRoll):
-        self.nrRoll = nrRoll
         self.dicelist = dicelist
+        self.nrRoll = nrRoll
         while True:
             try:
                 if self.nrRoll == None:
@@ -194,7 +196,12 @@ class Game:
                                 output = go.poker()
                             if select == "sixty":
                                 output = go.sixty()
-                            print(output)
+                            while True:
+                                erg = writeIt.show(select, output)
+                                if erg != "error":
+                                    break
+                                else:
+                                    continue
                             break
 
                         elif choise == "4":
@@ -247,7 +254,12 @@ class Game:
                                 output = go.poker()
                             if select == "sixty":
                                 output = go.sixty()
-                            print(output)
+                            while True:
+                                erg = writeIt.show(select, output)
+                                if erg != "error":
+                                    break
+                                else:
+                                    continue
                             break
                     except:
                         raise("Falsche Auswahl Roll 2")
@@ -268,7 +280,12 @@ class Game:
                         output = go.poker()
                     if select == "sixty":
                         output = go.sixty()
-                    print(output)
+                    while True:
+                        erg = writeIt.show(select, output)
+                        if erg != "error":
+                            break
+                        else:
+                            continue
                     break
                 else:
                     raise
@@ -276,6 +293,22 @@ class Game:
             except:
                 print("Falsche Eingabe")
 
+class Write:
+    def __init__(self):
+        self.table = {"1" : "", "2" : "", "3" : "", "4" : "",
+                    "5" : "", "6" : "", "min" : "", "max" : "",
+                    "kenter" : "", "full" : "", "poker" : "",
+                    "sixty": ""}
+
+    def show(self, select, output):
+        self.select = select
+        self.output = output
+        if self.table[self.select] == "":
+            self.table[self.select] = self.output
+            print(self.table)
+        else:
+            print("Bereits vorhanden")
+            return error
 
 ############################################################
 ##################EXECUTION STARTS HERE#####################
@@ -295,7 +328,6 @@ for item in startlist:
         print(item, end=", dann ")
     else:
         print(item + ".\n")
-
 start = Game(configDict[0], configDict[1], configDict[2], startlist)
 
 for lap in range(0,configDict[2]):
