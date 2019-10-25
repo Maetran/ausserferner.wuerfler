@@ -68,7 +68,7 @@ class Player:
             nr = random.randint(1,6)
             self.beginnerRoll[i] = nr
         self.winner = max(zip(self.beginnerRoll.values(), self.beginnerRoll.keys()))
-        print("Es beginnt", self.winner[1], "mit einer", self.winner[0])
+        print("Es beginnt", self.winner[1], "mit einer", self.winner[0], "\n")
 
     def sequence(self):
         #sort the list for the correct order
@@ -96,7 +96,7 @@ class Game:
                 wurf = random.randint(1,6)
                 self.dicelist.append(wurf)
             self.dicelist.sort()
-            print(self.player + ", das ist dein ERSTER Wurf:", end=" ")
+            print("\n", self.player + ", das ist dein ERSTER Wurf:", end=" ")
             for item in self.dicelist:
                 print(item, end=" ")
 
@@ -105,7 +105,7 @@ class Game:
                 wurf = random.randint(1,6)
                 self.dicelist.append(wurf)
             self.dicelist.sort()
-            print(self.player + ", das ist dein ZWEITER Wurf:", end=" ")
+            print("\n", self.player + ", das ist dein ZWEITER Wurf:", end=" ")
             for item in self.dicelist:
                 print(item, end=" ")
 
@@ -114,7 +114,7 @@ class Game:
                 wurf = random.randint(1,6)
                 self.dicelist.append(wurf)
             self.dicelist.sort()
-            print(self.player + ", das ist dein DRITTER Wurf:", end=" ")
+            print("\n", self.player + ", das ist dein DRITTER Wurf:", end=" ")
             for item in self.dicelist:
                 print(item, end=" ")
         self.analyse(self.dicelist, self.nrRoll)
@@ -129,10 +129,15 @@ class Game:
             wurf = random.randint(1,6)
             self.holdlist.append(wurf)
         self.holdlist.sort()
-        print("Neue Halteliste", self.holdlist)
         if nrRoll == 2:
+            print("\n", self.player + ", das ist dein ZWEITER Wurf:", end=" ")
+            for item in self.holdlist:
+                print(item, end=" ")
             self.analyse(self.holdlist, 2)
         if nrRoll == 3:
+            print("\n", self.player + ", das ist dein DRITTER Wurf:", end=" ")
+            for item in self.holdlist:
+                print(item, end=" ")
             self.analyse(self.holdlist, 3)
 
     def analyse(self,dicelist,nrRoll):
@@ -169,13 +174,18 @@ class Game:
 
                         elif choise == "3":
                             go = Auswertung(self.dicelist)
-                            print(self.dicelist)
+                            for item in self.dicelist:
+                                print(item, end=" ")
+                            print("\n")
                             print("Was schreiben: ", end= " ")
-                            select = input("1, 2, 3, 4, 5, 6, maxmin, kenter, full, poker, sixty: ->")
-                            if select == "1" or select == "2" or select == "3" or select == "4" or select == "5" or select == "6":
+                            select = input("1, 2, 3, 4, 5, 6, max, min, kenter, full, poker, sixty: ->")
+                            list = ["1","2","3","4","5","6"]
+                            if select in list:
                                 output = go.figures(select)
-                            if select == "maxmin":
-                                output = go.maxmin()
+                            if select == "max":
+                                output = go.max()
+                            if select == "min":
+                                output = go.min()
                             if select == "kenter":
                                 output = go.kenter()
                             if select == "full":
@@ -221,11 +231,14 @@ class Game:
                             go = Auswertung(self.dicelist)
                             print(self.dicelist)
                             print("Was schreiben: ", end= " ")
-                            select = input("1, 2, 3, 4, 5, 6, maxmin, kenter, full, poker, sixty: ->")
-                            if select == "1" or select == "2" or select == "3" or select == "4" or select == "5" or select == "6":
+                            select = input("1, 2, 3, 4, 5, 6, max, min, kenter, full, poker, sixty: ->")
+                            list = ["1","2","3","4","5","6"]
+                            if select in list:
                                 output = go.figures(select)
-                            if select == "maxmin":
-                                output = go.maxmin()
+                            if select == "max":
+                                output = go.max()
+                            if select == "min":
+                                output = go.min()
                             if select == "kenter":
                                 output = go.kenter()
                             if select == "full":
@@ -269,6 +282,10 @@ class Game:
             except:
                 print("Falsche Eingabe")
 
+
+############################################################
+##################EXECUTION STARTS HERE#####################
+
 #create basic game configuration
 config = GameBasic()
 configDict = config.gameConfig()
@@ -283,7 +300,7 @@ for item in startlist:
     if item != startlist[-1]:
         print(item, end=", dann ")
     else:
-        print(item + ".")
+        print(item + ".\n")
 
 start = Game(configDict[0], configDict[1], configDict[2], startlist)
 

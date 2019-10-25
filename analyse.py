@@ -16,7 +16,11 @@ class Auswertung:
         else:
             return 0
 
-    def maxmin(self):
+    def max(self):
+        total = sum(self.list)
+        return(total)
+
+    def min(self):
         total = sum(self.list)
         return(total)
 
