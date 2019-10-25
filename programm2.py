@@ -24,11 +24,12 @@ class GameBasic:
         ###def game mode
         while True:
             try:
-                self.mode = int(input("""Spielmodus wählen: \n
-                1: Klassisches 4 Reihen-Spiel
-                2. Würfeln auf Freireihe
-                3. Nur angesagte Reihe
-                -> """))
+                self.mode = 1
+                # int(input("""Spielmodus wählen: \n
+                # 1: Klassisches 4 Reihen-Spiel
+                # 2. Würfeln auf Freireihe
+                # 3. Nur angesagte Reihe
+                # -> """))
                 # if self.mode == 1:
                 #     playMode = "classic"
                 # elif self.mode == 2:
@@ -43,9 +44,9 @@ class GameBasic:
 
         #def nr of total rolls depending on self.mode
         if self.mode == 1:
-            self.rolls = 48
+            self.rolls = 1 #needs to be set to 48 after testing
         else:
-            self.rolls = 12
+            self.rolls = 1 #needs to be set to 12 after testing
 
     #return fixed parameters of game
     def gameConfig(self):
@@ -84,72 +85,189 @@ class Game:
         self.rolls = rolls
         self.startlist = startlist
 
-    def roll(self, player, firstRoll = True):
+    def rollAll(self, player, nrRoll = None):
         #first roll and return
+        self.nrRoll = nrRoll
         self.player = player
         self.dicelist = []
-        for i in range(0,5):
-            wurf = random.randint(1,6)
-            self.dicelist.append(wurf)
-        self.dicelist.sort()
-        print(self.player + ", das ist dein Wurf:", end=" ")
-        for item in self.dicelist:
-            print(item, end=" ")
-        self.analyse(self.dicelist)
 
-    def analyse(self,dicelist):
+        if self.nrRoll == None:
+            for i in range(0,5):
+                wurf = random.randint(1,6)
+                self.dicelist.append(wurf)
+            self.dicelist.sort()
+            print(self.player + ", das ist dein ERSTER Wurf:", end=" ")
+            for item in self.dicelist:
+                print(item, end=" ")
+
+        elif self.nrRoll == 2:
+            for i in range(0,5):
+                wurf = random.randint(1,6)
+                self.dicelist.append(wurf)
+            self.dicelist.sort()
+            print(self.player + ", das ist dein ZWEITER Wurf:", end=" ")
+            for item in self.dicelist:
+                print(item, end=" ")
+
+        elif self.nrRoll == 3:
+            for i in range(0,5):
+                wurf = random.randint(1,6)
+                self.dicelist.append(wurf)
+            self.dicelist.sort()
+            print(self.player + ", das ist dein DRITTER Wurf:", end=" ")
+            for item in self.dicelist:
+                print(item, end=" ")
+        self.analyse(self.dicelist, self.nrRoll)
+
+    def rollPart(self, player, holdlist, nrRoll=1):
+        self.player = player
+        self.nrRoll = nrRoll
+        self.holdlist = holdlist
+        newDice = []
+        toRoll = len(self.holdlist)
+        for i in range(0,5-toRoll):
+            wurf = random.randint(1,6)
+            self.holdlist.append(wurf)
+        self.holdlist.sort()
+        print("Neue Halteliste", self.holdlist)
+        if nrRoll == 2:
+            self.analyse(self.holdlist, 2)
+        if nrRoll == 3:
+            self.analyse(self.holdlist, 3)
+
+    def analyse(self,dicelist,nrRoll):
+        self.nrRoll = nrRoll
         self.dicelist = dicelist
         while True:
             try:
-                choise = input("""\n Was willst du machen: \n
-                1: Alle neu werfen
-                2. Einzelne halten
-                3. Anschreiben
-                4. Angesagt
-                -> """)
-                if choise == "1":
-                    self.roll(self.player)
-                elif choise == "2":
-                    hold = input("Was willst du halten: -> ")
-                elif choise == "3":
-                    go = Auswertung(self.dicelist)
-                    print(self.dicelist)
-                    print("Was schreiben: ", end= " ")
-                    select = input("1, 2, 3, 4, 5, 6, maxmin, kenter, full, poker, sixty: ->")
-                    if select == "1":
-                        output = go.figures(select)
+                if self.nrRoll == None:
+                    try:
+                        choise = input("""\n Was willst du machen: \n
+                        1: Alle neu werfen
+                        2. Einzelne halten
+                        3. Anschreiben
+                        4. Angesagt
+                        -> """)
+                        if choise == "1":
+                            if self.nrRoll == None:
+                                self.rollAll(self.player,nrRoll=2)
+                            elif self.nrRoll == 2:
+                                self.rollAll(self.player,nrRoll=3)
+
+                        elif choise == "2":
+                            holdList = []
+                            index = ["1","2","3","4","5"]
+                            hold = input("Was willst du halten: -> ")
+                            for item in hold:
+                                if item in index:
+                                    item = int(item)
+                                    holdList.append(self.dicelist[item-1])
+                                else:
+                                    continue
+                            self.rollPart(self.player, holdList, nrRoll=2)
+
+
+                        elif choise == "3":
+                            go = Auswertung(self.dicelist)
+                            print(self.dicelist)
+                            print("Was schreiben: ", end= " ")
+                            select = input("1, 2, 3, 4, 5, 6, maxmin, kenter, full, poker, sixty: ->")
+                            if select == "1" or select == "2" or select == "3" or select == "4" or select == "5" or select == "6":
+                                output = go.figures(select)
+                            if select == "maxmin":
+                                output = go.maxmin()
+                            if select == "kenter":
+                                output = go.kenter()
+                            if select == "full":
+                                output = go.full()
+                            if select == "poker":
+                                output = go.poker()
+                            if select == "sixty":
+                                output = go.sixty()
+                            print(output)
+                            break
+
+                        elif choise == "4":
+                            print("Angesagt aktiviert")
+                    except:
+                        raise("Falsche Auswahl Roll 1")
+
+                elif self.nrRoll == 2:
+                    try:
+                        choise = input("""\n Was willst du machen: \n
+                        1: Alle neu werfen
+                        2. Einzelne halten
+                        3. Anschreiben
+                        -> """)
+                        if choise == "1":
+                            if self.nrRoll == None:
+                                self.rollAll(self.player,nrRoll=2)
+                            elif self.nrRoll == 2:
+                                self.rollAll(self.player,nrRoll=3)
+
+                        elif choise == "2":
+                            holdList = []
+                            index = ["1","2","3","4","5"]
+                            hold = input("Was willst du halten: -> ")
+                            for item in hold:
+                                if item in index:
+                                    item = int(item)
+                                    holdList.append(self.dicelist[item-1])
+                                else:
+                                    continue
+                            self.rollPart(self.player, holdList, nrRoll=3)
+
+                        elif choise == "3":
+                            go = Auswertung(self.dicelist)
+                            print(self.dicelist)
+                            print("Was schreiben: ", end= " ")
+                            select = input("1, 2, 3, 4, 5, 6, maxmin, kenter, full, poker, sixty: ->")
+                            if select == "1" or select == "2" or select == "3" or select == "4" or select == "5" or select == "6":
+                                output = go.figures(select)
+                            if select == "maxmin":
+                                output = go.maxmin()
+                            if select == "kenter":
+                                output = go.kenter()
+                            if select == "full":
+                                output = go.full()
+                            if select == "poker":
+                                output = go.poker()
+                            if select == "sixty":
+                                output = go.sixty()
+                            print(output)
+                            break
+                    except:
+                        raise("Falsche Auswahl Roll 2")
+
+                elif self.nrRoll == 3:
+                    choise = input("""\n Was willst du machen: \n
+                    1. Anschreiben
+                    -> """)
+                    if choise == "1":
+                        go = Auswertung(self.dicelist)
+                        print(self.dicelist)
+                        print("Was schreiben: ", end= " ")
+                        select = input("1, 2, 3, 4, 5, 6, maxmin, kenter, full, poker, sixty: ->")
+                        if select == "1" or select == "2" or select == "3" or select == "4" or select == "5" or select == "6":
+                            output = go.figures(select)
+                        if select == "maxmin":
+                            output = go.maxmin()
+                        if select == "kenter":
+                            output = go.kenter()
+                        if select == "full":
+                            output = go.full()
+                        if select == "poker":
+                            output = go.poker()
+                        if select == "sixty":
+                            output = go.sixty()
                         print(output)
                         break
-                elif choise == "4":
-                    print("Angesagt aktiviert")
+
                 else:
                     raise
                 break
             except:
                 print("Falsche Eingabe")
-
-    # def analyse2(self):
-    #     while True:
-    #         try:
-    #             self.choise = int(input("""\n 2. Wurf - Was willst du machen: \n
-    #             1: Alle neu werfen
-    #             2. Einzelne halten
-    #             3. Anschreiben
-    #             -> """))
-    #             if self.choise == 1:
-    #                 self.roll(self.player, secondRoll="yes")
-    #             elif self.choise == 2:
-    #                 self.hold = input("""Was willst du halten:
-    #                 -> """)
-    #             elif self.choise == 3:
-    #                 schreiben = analyse.Auswertung(self.dicelist)
-    #                 self.schreiben(self.dicelist)
-    #             else:
-    #                 raise
-    #             break
-    #         except:
-    #             print("Falsche Eingabe")
-
 
 #create basic game configuration
 config = GameBasic()
@@ -171,6 +289,6 @@ start = Game(configDict[0], configDict[1], configDict[2], startlist)
 
 for lap in range(0,configDict[2]):
     for player in startlist:
-        roll = start.roll(player)
+        roll = start.rollAll(player)
         print(" ")
 print("Spiel beendet")
