@@ -55,10 +55,6 @@ class GameBasic:
 class Player:
     def __init__(self, players, mode, indiRolls):
         #ask for player names
-        self.mainTable = {"1" : "", "2" : "", "3" : "", "4" : "",
-                    "5" : "", "6" : "", "min" : "", "max" : "",
-                    "kenter" : "", "full" : "", "poker" : "",
-                    "sixty": ""}
         self.totalTable = {}
         self.playerList = []
         self.indiRolls = indiRolls
@@ -327,23 +323,31 @@ class Write():
 #create basic game configuration
 config = GameBasic()
 configDict = config.gameConfig()
+print(configDict) #nrPlayer, mode, rolls)
 
-#output to users, ready to start the game
-player = Player(configDict[0], configDict[1], configDict[2])
-totalTable = player.back()
+playerList = []
+totalTable = {}
+for i in range(0, configDict[0]):
+    playerName = input("Name Spieler " + str(i+1) + ": ")
+    playerList.append(playerName)
 
-#analyse starting player and output
-startlist = player.sequence()
-print("So wird gespielt: Erst ", end="")
-for item in startlist:
-    if item != startlist[-1]:
-        print(item, end=", dann ")
-    else:
-        print(item + ".\n")
-start = Game(configDict[0], configDict[1], configDict[2], startlist)
-
-for lap in range(0,configDict[2]):
-    for player in startlist:
-        roll = start.rollAll(player)
-        print(" ")
-print("Spiel beendet")
+print(playerList)
+# #output to users, ready to start the game
+# player = Player(configDict[0], configDict[1], configDict[2])
+# totalTable = player.back()
+#
+# #analyse starting player and output
+# startlist = player.sequence()
+# print("So wird gespielt: Erst ", end="")
+# for item in startlist:
+#     if item != startlist[-1]:
+#         print(item, end=", dann ")
+#     else:
+#         print(item + ".\n")
+# start = Game(configDict[0], configDict[1], configDict[2], startlist)
+#
+# for lap in range(0,configDict[2]):
+#     for player in startlist:
+#         roll = start.rollAll(player)
+#         print(" ")
+# print("Spiel beendet")
