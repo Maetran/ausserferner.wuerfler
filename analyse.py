@@ -64,7 +64,7 @@ class Auswertung:
         print("Was schreiben: ", end= " ")
         select = input("1, 2, 3, 4, 5, 6, max, min, kenter, full, poker, sixty: ->")
         list = ["1", "2", "3", "4", "5", "6"]
-        if select in list: #== "1" or select == "2" or select == "3" or select == "4" or select == "5" or select == "6":
+        if select in list:
             output = self.figures(select)
         if select == "max":
             output = self.max()
