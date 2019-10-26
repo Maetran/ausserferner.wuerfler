@@ -59,3 +59,23 @@ class Auswertung:
             return 60 + sum(self.list)
         else:
             return 0
+
+    def back(self):
+        print("Was schreiben: ", end= " ")
+        select = input("1, 2, 3, 4, 5, 6, max, min, kenter, full, poker, sixty: ->")
+        list = ["1", "2", "3", "4", "5", "6"]
+        if select in list: #== "1" or select == "2" or select == "3" or select == "4" or select == "5" or select == "6":
+            output = self.figures(select)
+        if select == "max":
+            output = self.max()
+        if select == "min":
+            output = self.min()
+        if select == "kenter":
+            output = self.kenter()
+        if select == "full":
+            output = self.full()
+        if select == "poker":
+            output = self.poker()
+        if select == "sixty":
+            output = self.sixty()
+        return select, output
