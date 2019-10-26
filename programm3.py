@@ -23,7 +23,7 @@ class GameBasic:
         #define mode
         self.mode = 1
         #define rolls
-        self.rolls = 2 #needs to be set to 48 after testing
+        self.rolls = 8 #needs to be set to 48 after testing
 
     def points(self):
         print(allPoints)
@@ -106,7 +106,7 @@ class Player:
         self.dicelist = dicelist
         self.nrRoll = nrRoll
         while True:
-            try:
+            # try:
                 if self.nrRoll == None:
                     try:
                         choise = input("""\n Was willst du machen: \n
@@ -186,17 +186,69 @@ class Player:
                 else:
                     raise
                 break
-            except:
-                print("Crash Analyse")
+            # except:
+                # print("Crash Analyse")
 
     def schreiben(self, choise, output, dicelist, nrRoll):
         if choise in self.wrote:
-            print("Bereits geschrieben")
+            print(choise, "bereits geschrieben")
             self.analyse(dicelist, nrRoll)
         else:
             self.wrote.append(choise)
             self.points[choise] = output
             print("Aktuelle Punkte", self.points)
+
+        #control Top
+        controllerTop = ["1", "2", "3", "4", "5", "6"]
+        resultTop = all(elem in self.wrote for elem in controllerTop)
+        if resultTop == True:
+            print("alle 6 drin")
+            self.sumTop = 0
+            for i in range(1,7):
+                self.sumTop += self.points[i]
+                if total >= 60:
+                    self.sumTop += 30
+            self.points[top] = self.sumTop
+            self.wrote.append("sumTop")
+        else:
+            pass
+
+        #control Maxmin
+        controllerMaxmin = ["1", "max", "min"]
+        resultMaxmin = all(elem in self.wrote for elem in controllerMaxmin)
+        if resultMaxmin == True:
+            self.sumMaxmin = self.points[1] * (self.points[max] - self.points[min])
+            self.points[maxmin] = self.sumMaxmin
+            self.wrote.append("maxmin")
+
+        ##control Bot
+        controllerBot = ["kenter", "full", "poker", "sixty"]
+        resultBot = all(elem in self.wrote for elem in controllerBot)
+        if resultBot == True:
+            self.sumBot = 0
+            for item in controllerBot:
+                self.sumBot += self.points[item]
+                self.points[sumBot] = self.sumBot
+                self.wrote.append("sumBot")
+        else:
+            pass
+
+        # #control all addings ready
+        # controllerAll = ["sumTop", "maxmin", "sumBot"]
+        # resultAll = all(elem in self.wrote for elem in conterollerAll)
+        # if resultAll == True:
+        #     self.sumAll = 0
+        #     for item in controllerAll:
+        #         self.sumAll += self.points[item]
+        #     self.points[sumAll] = self.sumAll
+        #     self.wrote.append("sumAll")
+        #
+        #     #final output
+        #     print("Die Gesamtpunktezahl von", self.name, "beträgt", self.sumALl)
+        # else:
+        #     pass
+
+
 
 
 ############################################################
@@ -223,7 +275,7 @@ for name in startList:
 
 #execution of rolls
 rolls = 0
-while rolls != 2:
+while rolls != 8:
     for i in range(0,configList[0]):
         print("Durchgang", rolls+1, "von total", configList[2])
         startObjs[i].rollAll()
