@@ -60,7 +60,29 @@ class Auswertung:
         else:
             return 0
 
-# list = [2,3,3,4,6]
-# d = Auswertung(list)
-# d1 = d.figures(2)
-# print(d1)
+    def back(self):
+        while True:
+            try:
+                print("Was schreiben: ", end= " ")
+                select = input("1, 2, 3, 4, 5, 6, max, min, kenter, full, poker, sixty: ->")
+                list = ["1", "2", "3", "4", "5", "6"]
+                if select in list:
+                    output = self.figures(select)
+                elif select == "max":
+                    output = self.max()
+                elif select == "min":
+                    output = self.min()
+                elif select == "kenter":
+                    output = self.kenter()
+                elif select == "full":
+                    output = self.full()
+                elif select == "poker":
+                    output = self.poker()
+                elif select == "sixty":
+                    output = self.sixty()
+                else:
+                    raise
+                return select, output
+                break
+            except:
+                print("Kann nicht geschrieben werden. Neu wählen: -> ")
