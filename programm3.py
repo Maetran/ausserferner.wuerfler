@@ -57,6 +57,10 @@ class Player:
 
     #roll all dice / first roll
     def rollAll(self, nrRoll = None):
+        print("\nAktuelle Punkte von", self.name, ":", end="")
+        for i in sorted(self.points):
+            print((i, self.points[i]), end=" ")
+        print("\n")
         #roll all dice and go to analyse
         self.nrRoll = nrRoll
         self.dicelist = []
@@ -66,17 +70,17 @@ class Player:
         self.dicelist.sort()
 
         if self.nrRoll == None:
-            print("\n", self.name + ", das ist dein ERSTER Wurf:", end=" ")
+            print("\n" + self.name + ", das ist dein ERSTER Wurf:", end=" ")
             for item in self.dicelist:
                 print(item, end=" ")
 
         elif self.nrRoll == 2:
-            print("\n", self.name + ", das ist dein ZWEITER Wurf:", end=" ")
+            print("\n" + self.name + ", das ist dein ZWEITER Wurf:", end=" ")
             for item in self.dicelist:
                 print(item, end=" ")
 
         else:
-            print("\n", self.name + ", das ist dein DRITTER Wurf:", end=" ")
+            print("\n" + self.name + ", das ist dein DRITTER Wurf:", end=" ")
             for item in self.dicelist:
                 print(item, end=" ")
 
@@ -84,6 +88,10 @@ class Player:
 
     #roll specific dice
     def rollPart(self, holdlist, nrRoll=1):
+        print("\nAktuelle Punkte von", self.name, ":", end="")
+        for i in sorted(self.points):
+            print((i, self.points[i]), end=" ")
+        print("\n")
         self.nrRoll = nrRoll
         toRoll = len(holdlist)
         for i in range(0,5-toRoll):
@@ -110,7 +118,7 @@ class Player:
             # try:
             if self.nrRoll == None:
                 try:
-                    choise = input("""\n Was willst du machen: \n
+                    choise = input("""\nWas willst du machen: \n
                     1: Alle neu werfen
                     2. Einzelne halten [Position angeben 1-5]
                     3. Anschreiben
@@ -137,7 +145,7 @@ class Player:
                     elif choise == "3":
                         go = Auswertung(self.dicelist)
                         for i in sorted(self.points):
-                            print((i, self.points[i], end=" ")
+                            print((i, self.points[i]), end=" ")
                         output = go.back()
                         self.schreiben(output[0], output[1], self.dicelist, self.nrRoll)
                         break
@@ -152,7 +160,7 @@ class Player:
 
             elif self.nrRoll == 2:
                 try:
-                    choise = input("""\n Was willst du machen: \n
+                    choise = input("""\nWas willst du machen: \n
                     1: Alle neu werfen
                     2. Einzelne halten [Position angeben 1-5]
                     3. Anschreiben
@@ -179,7 +187,7 @@ class Player:
                     elif choise == "3":
                         go = Auswertung(self.dicelist)
                         for i in sorted(self.points):
-                            print((i, self.points[i], end=" ")
+                            print((i, self.points[i]), end=" ")
                         output = go.back()
                         self.schreiben(output[0], output[1], self.dicelist, self.nrRoll)
                         break
@@ -189,7 +197,7 @@ class Player:
             elif self.nrRoll == 3:
                 go = Auswertung(self.dicelist)
                 for i in sorted(self.points):
-                    print((i, self.points[i], end=" ")
+                    print((i, self.points[i]), end=" ")
                 output = go.back()
                 self.schreiben(output[0], output[1], self.dicelist, self.nrRoll)
                 break
@@ -207,7 +215,10 @@ class Player:
         else:
             self.wrote.append(choise)
             self.points[choise] = output
-            print("Aktuelle Punkte", self.points)
+            print("\n\nNeue Punkte von", self.name, end=" ")
+            for i in sorted(self.points):
+                print((i, self.points[i]), end=" ")
+            print("\n")
 
         #control Top
         controllerTop = ["1", "2", "3", "4", "5", "6"]
@@ -219,7 +230,7 @@ class Player:
                 sumTop += self.points[i]
                 if sumTop >= 60:
                     sumTop += 30
-            self.points[sumTop] = sumTop
+            self.points["sumTop"] = sumTop
             self.wrote.append("sumTop")
             print("Punkte oben", sumTop)
         else:
@@ -256,11 +267,11 @@ class Player:
             sumAll = 0
             for item in controllerAll:
                 sumAll += self.points[item]
-            self.points[sumAll] = sumAll
+            self.points["sumAll"] = sumAll
             self.wrote.append("sumAll")
 
             #final output
-            print("Die Gesamtpunktezahl von", self.name, "beträgt", self.sumALl)
+            print("Die Gesamtpunktezahl von", self.name, "beträgt", self.points["sumAll"])
         else:
             None
 
@@ -291,8 +302,9 @@ for name in startList:
 
 #execution of rolls
 rolls = 0
-while rolls != 13:
+while rolls != 12:
     for i in range(0,configList[0]):
+        print("-------------------------------------------------")
         print("Durchgang", rolls+1, "von total", configList[2])
         startObjs[i].rollAll()
     rolls += 1

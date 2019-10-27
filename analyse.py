@@ -61,21 +61,28 @@ class Auswertung:
             return 0
 
     def back(self):
-        print("Was schreiben: ", end= " ")
-        select = input("1, 2, 3, 4, 5, 6, max, min, kenter, full, poker, sixty: ->")
-        list = ["1", "2", "3", "4", "5", "6"]
-        if select in list:
-            output = self.figures(select)
-        if select == "max":
-            output = self.max()
-        if select == "min":
-            output = self.min()
-        if select == "kenter":
-            output = self.kenter()
-        if select == "full":
-            output = self.full()
-        if select == "poker":
-            output = self.poker()
-        if select == "sixty":
-            output = self.sixty()
-        return select, output
+        while True:
+            try:
+                print("Was schreiben: ", end= " ")
+                select = input("1, 2, 3, 4, 5, 6, max, min, kenter, full, poker, sixty: ->")
+                list = ["1", "2", "3", "4", "5", "6"]
+                if select in list:
+                    output = self.figures(select)
+                elif select == "max":
+                    output = self.max()
+                elif select == "min":
+                    output = self.min()
+                elif select == "kenter":
+                    output = self.kenter()
+                elif select == "full":
+                    output = self.full()
+                elif select == "poker":
+                    output = self.poker()
+                elif select == "sixty":
+                    output = self.sixty()
+                else:
+                    raise
+                return select, output
+                break
+            except:
+                print("Kann nicht geschrieben werden. Neu wählen: -> ")
