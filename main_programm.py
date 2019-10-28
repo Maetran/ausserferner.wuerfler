@@ -57,7 +57,7 @@ class Player:
 
     #roll all dice / first roll
     def rollAll(self, nrRoll = None):
-        print("\nAktuelle Punkte von", self.name, ":", end="")
+        print("\nAktuelle Punkte von", self.name + ":", end="\n")
         for i in sorted(self.points):
             print((i, self.points[i]), end=" ")
         print("\n")
@@ -88,7 +88,7 @@ class Player:
 
     #roll specific dice
     def rollPart(self, holdlist, pokerJaNein, nrRoll=1):
-        print("\nAktuelle Punkte von", self.name, ":", end="")
+        print("\nAktuelle Punkte von", self.name + ":", end="\n")
         for i in sorted(self.points):
             print((i, self.points[i]), end=" ")
         print("\n")
@@ -149,11 +149,9 @@ class Player:
                         for i in dicelist:
                             pokerControl[i] = pokerControl.get(i, 0) + 1
                         for k,v in pokerControl.items():
-                            if v == "4":
-                                print("Poker Ja")
+                            if v == 4 or v == 5:
                                 pokerJaNein = "pokerJa"
                             else:
-                                print("Poker Nein")
                                 pokerJaNein = "pokerNein"
 
                         self.rollPart(holdList, pokerJaNein, nrRoll=2)
@@ -203,11 +201,9 @@ class Player:
                         for i in dicelist:
                             pokerControl[i] = pokerControl.get(i, 0) + 1
                         for k,v in pokerControl.items():
-                            if v == "4":
-                                print("Poker Ja")
+                            if v == 4 or v == 5:
                                 pokerJaNein = "pokerJa"
                             else:
-                                print("Poker Nein")
                                 pokerJaNein = "pokerNein"
 
                         self.rollPart(holdList, pokerJaNein, nrRoll=3)
@@ -243,7 +239,7 @@ class Player:
         else:
             self.wrote.append(choise)
             self.points[choise] = output
-            print("\n\nNeue Punkte von", self.name, end=" ")
+            print("\n\nNeue Punkte von", self.name + end="\n")
             for i in sorted(self.points):
                 print((i, self.points[i]), end=" ")
             print("\n")
