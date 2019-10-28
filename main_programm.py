@@ -84,11 +84,10 @@ class Player:
             for item in dicelist:
                 print(item, end=" ")
 
-        pokerControl = dicelist
-        self.analyse(dicelist, self.nrRoll, pokerControl)
+        self.analyse(dicelist, nrRoll)
 
     #roll specific dice
-    def rollPart(self, holdlist, nrRoll=1):
+    def rollPart(self, holdlist, pokerJaNein, nrRoll=1):
         print("\nAktuelle Punkte von", self.name, ":", end="")
         for i in sorted(self.points):
             print((i, self.points[i]), end=" ")
@@ -99,22 +98,25 @@ class Player:
             wurf = random.randint(1,6)
             holdlist.append(wurf)
         holdlist.sort()
-        pokerControl = holdlist
+
         if nrRoll == 2:
             print("\n", self.name + ", das ist dein ZWEITER Wurf:", end=" ")
             for item in holdlist:
                 print(item, end=" ")
-            self.analyse(holdlist, 2, pokerControl)
+
+            self.analyse(holdlist, 2, pokerJaNein)
+
         if nrRoll == 3:
             print("\n", self.name + ", das ist dein DRITTER Wurf:", end=" ")
             for item in holdlist:
                 print(item, end=" ")
             print("")
-            self.analyse(holdlist, 3, pokerControl)
+
+            self.analyse(holdlist, 3)
 
 
     #analyse rolls
-    def analyse(self, dicelist, nrRoll, pokerControl):
+    def analyse(self, dicelist, nrRoll, pokerJaNein=None):
         self.nrRoll = nrRoll
         while True:
             # try:
@@ -142,7 +144,19 @@ class Player:
                                 holdList.append(dicelist[item-1])
                             else:
                                 continue
-                        self.rollPart(holdList, nrRoll=2, pokerControl)
+
+                        pokerControl = {}
+                        for i in dicelist:
+                            pokerControl[i] = pokerControl.get(i, 0) + 1
+                        for k,v in pokerControl.items():
+                            if v == "4":
+                                print("Poker Ja")
+                                pokerJaNein = "pokerJa"
+                            else:
+                                print("Poker Nein")
+                                pokerJaNein = "pokerNein"
+
+                        self.rollPart(holdList, pokerJaNein, nrRoll=2)
 
                     elif choise == "3":
                         go = Auswertung(dicelist)
@@ -184,13 +198,25 @@ class Player:
                                 holdList.append(dicelist[item-1])
                             else:
                                 continue
-                        self.rollPart(holdList, nrRoll=3, pokerControl)
+
+                        pokerControl = {}
+                        for i in dicelist:
+                            pokerControl[i] = pokerControl.get(i, 0) + 1
+                        for k,v in pokerControl.items():
+                            if v == "4":
+                                print("Poker Ja")
+                                pokerJaNein = "pokerJa"
+                            else:
+                                print("Poker Nein")
+                                pokerJaNein = "pokerNein"
+
+                        self.rollPart(holdList, pokerJaNein, nrRoll=3)
 
                     elif choise == "3":
                         go = Auswertung(dicelist)
                         for i in sorted(self.points):
                             print((i, self.points[i]), end=" ")
-                        output = go.back()
+                        output = go.back(pokerJaNein)
                         self.schreiben(output[0], output[1], dicelist, self.nrRoll)
                         break
                 except:
@@ -200,7 +226,7 @@ class Player:
                 go = Auswertung(dicelist)
                 for i in sorted(self.points):
                     print((i, self.points[i]), end=" ")
-                output = go.back()
+                output = go.back(pokerJaNein)
                 self.schreiben(output[0], output[1], dicelist, self.nrRoll)
                 break
             else:

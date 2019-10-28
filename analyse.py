@@ -60,7 +60,7 @@ class Auswertung:
         else:
             return 0
 
-    def back(self):
+    def back(self, pokerJaNein=None):
         while True:
             try:
                 print("Was schreiben: ", end= " ")
@@ -77,7 +77,11 @@ class Auswertung:
                 elif select == "full":
                     output = self.full()
                 elif select == "poker":
-                    output = self.poker()
+                    if pokerJaNein == "pokerJa":
+                        print("Poker darf nicht geschrieben werden")
+                        raise
+                    else:
+                        output = self.poker()
                 elif select == "sixty":
                     output = self.sixty()
                 else:
