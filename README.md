@@ -5,11 +5,11 @@ Geschrieben wird der Grossteil in Python3 im Zuge meiner Bemühungen diese tolle
 
 ## Getting Started
 
-Lerne die Regeln des spieles, den Rest besorge ich ;) Wenn du mir helfen willst: melde dich bei mir.
+Lerne die Regeln des Spieles, den Rest besorge ich ;) Wenn du mir helfen willst: melde dich bei mir.
 
 ### Prerequisites
 
-Es soll keine Voraussetzungen geben. Ziel ist, dass dieses Projekt auf einem Webserver läuft und event. eine Responsive-Lösung angeboten werden kann.
+Es soll keine Voraussetzungen geben. Ziel ist, dass dieses Projekt auf einem Webserver mit Benutzeroberfläche läuft und event. eine Responsive-Lösung angeboten werden kann.
 
 ## Deployment
 
