@@ -57,38 +57,38 @@ class Player:
 
     #roll all dice / first roll
     def rollAll(self, nrRoll = None):
-        print("\nAktuelle Punkte von", self.name, ":", end="")
+        print("\nAktuelle Punkte von", self.name + ":", end="\n")
         for i in sorted(self.points):
             print((i, self.points[i]), end=" ")
         print("\n")
         #roll all dice and go to analyse
         self.nrRoll = nrRoll
-        self.dicelist = []
+        dicelist = []
         for i in range(0,5):
             wurf = random.randint(1,6)
-            self.dicelist.append(wurf)
-        self.dicelist.sort()
+            dicelist.append(wurf)
+        dicelist.sort()
 
         if self.nrRoll == None:
             print("\n" + self.name + ", das ist dein ERSTER Wurf:", end=" ")
-            for item in self.dicelist:
+            for item in dicelist:
                 print(item, end=" ")
 
         elif self.nrRoll == 2:
             print("\n" + self.name + ", das ist dein ZWEITER Wurf:", end=" ")
-            for item in self.dicelist:
+            for item in dicelist:
                 print(item, end=" ")
 
         else:
             print("\n" + self.name + ", das ist dein DRITTER Wurf:", end=" ")
-            for item in self.dicelist:
+            for item in dicelist:
                 print(item, end=" ")
 
-        self.analyse(self.dicelist, self.nrRoll)
+        self.analyse(dicelist, nrRoll)
 
     #roll specific dice
-    def rollPart(self, holdlist, nrRoll=1):
-        print("\nAktuelle Punkte von", self.name, ":", end="")
+    def rollPart(self, holdlist, pokerJaNein, nrRoll=1):
+        print("\nAktuelle Punkte von", self.name + ":", end="\n")
         for i in sorted(self.points):
             print((i, self.points[i]), end=" ")
         print("\n")
@@ -98,21 +98,25 @@ class Player:
             wurf = random.randint(1,6)
             holdlist.append(wurf)
         holdlist.sort()
+
         if nrRoll == 2:
             print("\n", self.name + ", das ist dein ZWEITER Wurf:", end=" ")
             for item in holdlist:
                 print(item, end=" ")
-            self.analyse(holdlist, 2)
+
+            self.analyse(holdlist, 2, pokerJaNein)
+
         if nrRoll == 3:
             print("\n", self.name + ", das ist dein DRITTER Wurf:", end=" ")
             for item in holdlist:
                 print(item, end=" ")
             print("")
+
             self.analyse(holdlist, 3)
 
+
     #analyse rolls
-    def analyse(self, dicelist, nrRoll):
-        self.dicelist = dicelist
+    def analyse(self, dicelist, nrRoll, pokerJaNein=None):
         self.nrRoll = nrRoll
         while True:
             # try:
@@ -137,17 +141,27 @@ class Player:
                         for item in hold:
                             if item in index:
                                 item = int(item)
-                                holdList.append(self.dicelist[item-1])
+                                holdList.append(dicelist[item-1])
                             else:
                                 continue
-                        self.rollPart(holdList, nrRoll=2)
+
+                        pokerControl = {}
+                        for i in dicelist:
+                            pokerControl[i] = pokerControl.get(i, 0) + 1
+                        for k,v in pokerControl.items():
+                            if v == 4 or v == 5:
+                                pokerJaNein = "pokerJa"
+                            else:
+                                pokerJaNein = "pokerNein"
+
+                        self.rollPart(holdList, pokerJaNein, nrRoll=2)
 
                     elif choise == "3":
-                        go = Auswertung(self.dicelist)
+                        go = Auswertung(dicelist)
                         for i in sorted(self.points):
                             print((i, self.points[i]), end=" ")
                         output = go.back()
-                        self.schreiben(output[0], output[1], self.dicelist, self.nrRoll)
+                        self.schreiben(output[0], output[1], dicelist, self.nrRoll)
                         break
 
                     elif choise == "4":
@@ -179,27 +193,37 @@ class Player:
                         for item in hold:
                             if item in index:
                                 item = int(item)
-                                holdList.append(self.dicelist[item-1])
+                                holdList.append(dicelist[item-1])
                             else:
                                 continue
-                        self.rollPart(holdList, nrRoll=3)
+
+                        pokerControl = {}
+                        for i in dicelist:
+                            pokerControl[i] = pokerControl.get(i, 0) + 1
+                        for k,v in pokerControl.items():
+                            if v == 4 or v == 5:
+                                pokerJaNein = "pokerJa"
+                            else:
+                                pokerJaNein = "pokerNein"
+
+                        self.rollPart(holdList, pokerJaNein, nrRoll=3)
 
                     elif choise == "3":
-                        go = Auswertung(self.dicelist)
+                        go = Auswertung(dicelist)
                         for i in sorted(self.points):
                             print((i, self.points[i]), end=" ")
-                        output = go.back()
-                        self.schreiben(output[0], output[1], self.dicelist, self.nrRoll)
+                        output = go.back(pokerJaNein)
+                        self.schreiben(output[0], output[1], dicelist, self.nrRoll)
                         break
                 except:
                     raise("Fehler bei Analyse Roll 2")
 
             elif self.nrRoll == 3:
-                go = Auswertung(self.dicelist)
+                go = Auswertung(dicelist)
                 for i in sorted(self.points):
                     print((i, self.points[i]), end=" ")
-                output = go.back()
-                self.schreiben(output[0], output[1], self.dicelist, self.nrRoll)
+                output = go.back(pokerJaNein)
+                self.schreiben(output[0], output[1], dicelist, self.nrRoll)
                 break
             else:
                 raise
@@ -215,7 +239,7 @@ class Player:
         else:
             self.wrote.append(choise)
             self.points[choise] = output
-            print("\n\nNeue Punkte von", self.name, end=" ")
+            print("\n\nNeue Punkte von", self.name + end="\n")
             for i in sorted(self.points):
                 print((i, self.points[i]), end=" ")
             print("\n")
