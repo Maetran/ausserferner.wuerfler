@@ -239,7 +239,7 @@ class Player:
         else:
             self.wrote.append(choise)
             self.points[choise] = output
-            print("\n\nNeue Punkte von", self.name + end="\n")
+            print("\n\nNeue Punkte von", self.name, end="\n")
             for i in sorted(self.points):
                 print((i, self.points[i]), end=" ")
             print("\n")

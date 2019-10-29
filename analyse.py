@@ -78,7 +78,7 @@ class Auswertung:
                     output = self.full()
                 elif select == "poker":
                     if pokerJaNein == "pokerJa":
-                        print("Poker darf nicht geschrieben werden")
+                        print("Poker nicht erlaubt")
                         raise
                     else:
                         output = self.poker()
