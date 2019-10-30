@@ -599,5 +599,5 @@ else: #define teams if playercount == 4; 2v2 Mode
     print("Team 2 Gesamtpunktezahl:", )
     erg1 = team1.endergebnis()
     erg2 = team2.endergebnis()
-    if erg1 > erg: print("Team 1 gewinnt")
+    if erg1 > erg2: print("Team 1 gewinnt")
     else: print("Team 2 gewinnt")
