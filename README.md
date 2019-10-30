@@ -13,7 +13,7 @@ Es soll keine Voraussetzungen geben. Ziel ist, dass dieses Projekt auf einem Web
 
 ## Deployment
 
-Ich werde es nach Fertigstellung auf https://www.ausserfernnerds.me hosten.
+Ich werde es nach Fertigstellung auf https://www.ausserfernnerds.me veröffentlichen.
 
 ## Built With
 
