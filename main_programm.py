@@ -9,13 +9,16 @@ class GameBasic:
         ###def nr of players
         while True:
             try:
-                self.nrPlayer = int(input("Anzahl Spieler zwischen 1-4: "))
+                self.nrPlayer = int(input("Anzahl Spieler zwischen 1-4 (4 Spieler: 2+2 Teams): "))
                 if self.nrPlayer > 4:
                     print("Zu viele Spieler")
                     raise
                 elif self.nrPlayer <= 0:
                     print("Zu wenige Spieler ")
                     raise
+                elif self.nrPlayer == 4:
+                    print("Teammodus aktiv, im nächsten Schritt 2er Teams bilden")
+                    break
                 else:
                     break
             except:
@@ -24,9 +27,6 @@ class GameBasic:
         self.mode = 1
         #define rolls
         self.rolls = 12 #needs to be set to 48 after testing
-
-    def points(self):
-        print(allPoints)
 
     #return fixed parameters of game
     def gameConfig(self):
@@ -56,7 +56,8 @@ class Player:
         self.wrote = []
 
     #roll all dice / first roll
-    def rollAll(self, nrRoll = None):
+    def rollAll(self, nrRoll=None):
+
         print("\nAktuelle Punkte von", self.name + ":", end="\n")
         for i in sorted(self.points):
             print((i, self.points[i]), end=" ")
@@ -73,17 +74,17 @@ class Player:
             print("\n" + self.name + ", das ist dein ERSTER Wurf:", end=" ")
             for item in dicelist:
                 print(item, end=" ")
-
+            print("\n")
         elif self.nrRoll == 2:
             print("\n" + self.name + ", das ist dein ZWEITER Wurf:", end=" ")
             for item in dicelist:
                 print(item, end=" ")
-
+            print("\n")
         else:
             print("\n" + self.name + ", das ist dein DRITTER Wurf:", end=" ")
             for item in dicelist:
                 print(item, end=" ")
-
+            print("\n")
         self.analyse(dicelist, nrRoll)
 
     #roll specific dice
@@ -103,17 +104,15 @@ class Player:
             print("\n", self.name + ", das ist dein ZWEITER Wurf:", end=" ")
             for item in holdlist:
                 print(item, end=" ")
-
+            print("\n")
             self.analyse(holdlist, 2, pokerJaNein)
 
         if nrRoll == 3:
             print("\n", self.name + ", das ist dein DRITTER Wurf:", end=" ")
             for item in holdlist:
                 print(item, end=" ")
-            print("")
-
+            print("\n")
             self.analyse(holdlist, 3)
-
 
     #analyse rolls
     def analyse(self, dicelist, nrRoll, pokerJaNein=None):
@@ -185,7 +184,6 @@ class Player:
                         elif self.nrRoll == 2:
                             self.rollAll(nrRoll=3)
 
-
                     elif choise == "2":
                         holdList = []
                         index = ["1","2","3","4","5"]
@@ -206,7 +204,7 @@ class Player:
                             else:
                                 pokerJaNein = "pokerNein"
 
-                        self.rollPart(holdList, pokerJaNein, nrRoll=3)
+                        self.rollPart(holdList, pokerJaNein, nrRoll=3,)
 
                     elif choise == "3":
                         go = Auswertung(dicelist)
@@ -228,9 +226,6 @@ class Player:
             else:
                 raise
             break
-            # except Exception as e:
-            #     print(str(e))
-            #     print("Crash Analyse")
 
     def schreiben(self, choise, output, dicelist, nrRoll):
         if choise in self.wrote:
@@ -297,10 +292,255 @@ class Player:
             #final output
             print("Die Gesamtpunktezahl von", self.name, "beträgt", self.points["sumAll"])
         else:
+            pass #singleplayer
+
+class Team:
+    def __init__(self, teamName):
+        self.teamName = teamName
+        self.teamWrote = []
+        self.teamPoints = {}
+
+    def rollAllTeam(self, name, nrRoll=None):
+        self.name = name
+
+        print("\nAktuelle Punkte von", self.teamName + ":", end="\n")
+        for i in sorted(self.teamPoints):
+            print((i, self.teamPoints[i]), end=" ")
+        print("\n")
+        #roll all dice and go to analyse
+        self.nrRoll = nrRoll
+        dicelist = []
+        for i in range(0,5):
+            wurf = random.randint(1,6)
+            dicelist.append(wurf)
+        dicelist.sort()
+
+        if self.nrRoll == None:
+            print("\n" + self.name + ", das ist dein ERSTER Wurf:", end=" ")
+            for item in dicelist:
+                print(item, end=" ")
+            print("\n")
+        elif self.nrRoll == 2:
+            print("\n" + self.name + ", das ist dein ZWEITER Wurf:", end=" ")
+            for item in dicelist:
+                print(item, end=" ")
+            print("\n")
+        else:
+            print("\n" + self.name + ", das ist dein DRITTER Wurf:", end=" ")
+            for item in dicelist:
+                print(item, end=" ")
+            print("\n")
+        self.analyseTeam(dicelist, nrRoll)
+
+    #roll specific dice
+    def rollPartTeam(self, holdlist, pokerJaNein, nrRoll=1):
+        print("\nAktuelle Punkte von", self.teamName + ":", end="\n")
+        for i in sorted(self.teamPoints):
+            print((i, self.teamPoints[i]), end=" ")
+        print("\n")
+        self.nrRoll = nrRoll
+        toRoll = len(holdlist)
+        for i in range(0,5-toRoll):
+            wurf = random.randint(1,6)
+            holdlist.append(wurf)
+        holdlist.sort()
+
+        if nrRoll == 2:
+            print("\n", self.name + ", das ist dein ZWEITER Wurf:", end=" ")
+            for item in holdlist:
+                print(item, end=" ")
+            print("\n")
+            self.analyseTeam(holdlist, 2, pokerJaNein)
+
+        if nrRoll == 3:
+            print("\n", self.name + ", das ist dein DRITTER Wurf:", end=" ")
+            for item in holdlist:
+                print(item, end=" ")
+            print("\n")
+            self.analyseTeam(holdlist, 3)
+
+    #analyse rolls
+    def analyseTeam(self, dicelist, nrRoll, pokerJaNein=None):
+        self.nrRoll = nrRoll
+        while True:
+            # try:
+            if self.nrRoll == None:
+                try:
+                    choise = input("""\nWas willst du machen: \n
+                    1: Alle neu werfen
+                    2. Einzelne halten [Position angeben 1-5]
+                    3. Anschreiben
+                    4. Angesagt
+                    -> """)
+                    if choise == "1":
+                        if self.nrRoll == None:
+                            self.rollAllTeam(self.name, nrRoll=2)
+                        elif self.nrRoll == 2:
+                            self.rollAllTeam(self.name, nrRoll=3)
+
+                    elif choise == "2":
+                        holdList = []
+                        index = ["1","2","3","4","5"]
+                        hold = input("Was willst du halten: -> ")
+                        for item in hold:
+                            if item in index:
+                                item = int(item)
+                                holdList.append(dicelist[item-1])
+                            else:
+                                continue
+
+                        pokerControl = {}
+                        for i in dicelist:
+                            pokerControl[i] = pokerControl.get(i, 0) + 1
+                        for k,v in pokerControl.items():
+                            if v == 4 or v == 5:
+                                pokerJaNein = "pokerJa"
+                            else:
+                                pokerJaNein = "pokerNein"
+
+                        self.rollPartTeam(holdList, pokerJaNein, nrRoll=2)
+
+                    elif choise == "3":
+                        go = Auswertung(dicelist)
+                        for i in sorted(self.teamPoints):
+                            print((i, self.teamPoints[i]), end=" ")
+                        output = go.back()
+                        self.schreibenTeam(output[0], output[1], dicelist, self.nrRoll)
+                        break
+
+                    elif choise == "4":
+                        print("Angesagt aktiviert")
+
+                    else:
+                        break
+                except:
+                    raise("Fehler bei Analyse Roll 1")
+
+            elif self.nrRoll == 2:
+                try:
+                    choise = input("""\nWas willst du machen: \n
+                    1: Alle neu werfen
+                    2. Einzelne halten [Position angeben 1-5]
+                    3. Anschreiben
+                    -> """)
+                    if choise == "1":
+                        if self.nrRoll == None:
+                            self.rollAllTeam(self.name, nrRoll=2)
+                        elif self.nrRoll == 2:
+                            self.rollAllTeam(self.name, nrRoll=3)
+
+                    elif choise == "2":
+                        holdList = []
+                        index = ["1","2","3","4","5"]
+                        hold = input("Was willst du halten: -> ")
+                        for item in hold:
+                            if item in index:
+                                item = int(item)
+                                holdList.append(dicelist[item-1])
+                            else:
+                                continue
+
+                        pokerControl = {}
+                        for i in dicelist:
+                            pokerControl[i] = pokerControl.get(i, 0) + 1
+                        for k,v in pokerControl.items():
+                            if v == 4 or v == 5:
+                                pokerJaNein = "pokerJa"
+                            else:
+                                pokerJaNein = "pokerNein"
+
+                        self.rollPartTeam(holdList, pokerJaNein, nrRoll=3,)
+
+                    elif choise == "3":
+                        go = Auswertung(dicelist)
+                        for i in sorted(self.teamPoints):
+                            print((i, self.teamPoints[i]), end=" ")
+                        output = go.back(pokerJaNein)
+                        self.schreibenTeam(output[0], output[1], dicelist, self.nrRoll)
+                        break
+                except:
+                    raise("Fehler bei Analyse Roll 2")
+
+            elif self.nrRoll == 3:
+                go = Auswertung(dicelist)
+                for i in sorted(self.teamPoints):
+                    print((i, self.teamPoints[i]), end=" ")
+                output = go.back(pokerJaNein)
+                self.schreibenTeam(output[0], output[1], dicelist, self.nrRoll)
+                break
+            else:
+                raise
+            break
+
+    def schreibenTeam(self, choise, output, dicelist, nrRoll):
+        if choise in self.teamWrote:
+            print(choise, "bereits geschrieben")
+            self.analyseTeam(dicelist, nrRoll)
+        else:
+            self.teamWrote.append(choise)
+            self.teamPoints[choise] = output
+            print("\n\nNeue Punkte von", self.teamName, end="\n")
+            for i in sorted(self.teamPoints):
+                print((i, self.teamPoints[i]), end=" ")
+            print("\n")
+
+        #control Top
+        controllerTop = ["1", "2", "3", "4", "5", "6"]
+        resultTop = all(elem in self.teamWrote for elem in controllerTop)
+        if resultTop == True:
+            sumTop = 0
+            for i in range(1,7):
+                i = str(i)
+                sumTop += self.teamPoints[i]
+                if sumTop >= 60:
+                    sumTop += 30
+            self.teamPoints["sumTop"] = sumTop
+            self.teamWrote.append("sumTop")
+            print("Punkte oben", sumTop)
+        else:
             None
 
+        #control Maxmin
+        controllerMaxmin = ["1", "max", "min"]
+        resultMaxmin = all(elem in self.teamWrote for elem in controllerMaxmin)
+        if resultMaxmin == True:
+            sumMaxmin = self.teamPoints["1"] * (self.teamPoints["max"] - self.teamPoints["min"])
+            self.teamPoints["maxmin"] = sumMaxmin
+            self.teamWrote.append("maxmin")
+            print("Differenz", sumMaxmin)
+        else:
+            None
 
+        ##control Bot
+        controllerBot = ["kenter", "full", "poker", "sixty"]
+        resultBot = all(elem in self.teamWrote for elem in controllerBot)
+        if resultBot == True:
+            sumBot = 0
+            for item in controllerBot:
+                sumBot += self.teamPoints[item]
+                self.teamPoints["sumBot"] = sumBot
+                self.teamWrote.append("sumBot")
+            print("Punkt unten", sumBot)
+        else:
+            None
 
+        #control all addings ready
+        controllerAll = ["sumTop", "maxmin", "sumBot"]
+        resultAll = all(elem in self.teamWrote for elem in controllerAll)
+        if resultAll == True:
+            sumAll = 0
+            for item in controllerAll:
+                sumAll += self.teamPoints[item]
+            self.teamPoints["sumAll"] = sumAll
+            self.teamWrote.append("sumAll")
+
+            #final output
+            print("Die Gesamtpunktezahl von", self.teamName, "beträgt", self.teamPoints["sumAll"])
+        else:
+            pass #singleplayer
+
+    def endergebnis(self):
+        return self.teamPoints["sumAll"]
 
 ############################################################
 ##################EXECUTION STARTS HERE#####################
@@ -313,22 +553,51 @@ playerList = []
 for i in range(0, configList[0]):
     playerName = input("Name Spieler " + str(i+1) + ": ")
     playerList.append(playerName)
+#startlist
 startList = game.beginner(playerList)
-
 #table of points
-totalPointsAll = {}
 
-#define object for every player
-startObjs = []
-for name in startList:
-    name = Player(name)
-    startObjs.append(name)
+if configList[0] != 4:
+    #define object for non 2v2 Mode
+    startObjs = []
+    for name in startList:
+        name = Player(name)
+        startObjs.append(name)
+    #execution of rolls
+    rolls = 0
+    while rolls != 12:
+        for i in range(0,configList[0]):
+            print("-------------------------------------------------")
+            print("Durchgang", rolls+1, "von total", configList[2])
+            startObjs[i].rollAll()
+            rolls += 1
 
-#execution of rolls
-rolls = 0
-while rolls != 12:
-    for i in range(0,configList[0]):
-        print("-------------------------------------------------")
-        print("Durchgang", rolls+1, "von total", configList[2])
-        startObjs[i].rollAll()
-    rolls += 1
+else: #define teams if playercount == 4; 2v2 Mode
+    team1 = Team("Team 1")
+    team2 = Team("Team 2")
+    print("Team 1:", startList[0], startList[2])
+    print("Team 2:", startList[1], startList[3]
+    )
+    #execution of rolls
+    rolls = 0
+    while rolls != 6:
+        for i in range(0,configList[0]):
+            print("Durchgang", rolls+1, "von total", int(configList[2]/2))
+            print("#########################NEUE RUNDE#########################")
+            team1.rollAllTeam(startList[0])
+            print("#########################NÄCHSTER SPIELER#########################")
+            team2.rollAllTeam(startList[1])
+            print("#########################NÄCHSTER SPIELER#########################")
+            team1.rollAllTeam(startList[2])
+            print("#########################NÄCHSTER SPIELER#########################")
+            team2.rollAllTeam(startList[3])
+            print("#########################NÄCHSTER SPIELER#########################")
+            rolls += 1
+
+    print("Spiel beendet")
+    print("Team 1 Gesamtpunktezahl:", )
+    print("Team 2 Gesamtpunktezahl:", )
+    erg1 = team1.endergebnis()
+    erg2 = team2.endergebnis()
+    if erg1 > erg: print("Team 1 gewinnt")
+    else: print("Team 2 gewinnt")
