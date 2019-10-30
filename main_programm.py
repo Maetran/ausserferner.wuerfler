@@ -74,17 +74,17 @@ class Player:
             print("\n" + self.name + ", das ist dein ERSTER Wurf:", end=" ")
             for item in dicelist:
                 print(item, end=" ")
-
+            print("\n")
         elif self.nrRoll == 2:
             print("\n" + self.name + ", das ist dein ZWEITER Wurf:", end=" ")
             for item in dicelist:
                 print(item, end=" ")
-
+            print("\n")
         else:
             print("\n" + self.name + ", das ist dein DRITTER Wurf:", end=" ")
             for item in dicelist:
                 print(item, end=" ")
-
+            print("\n")
         self.analyse(dicelist, nrRoll)
 
     #roll specific dice
@@ -376,9 +376,9 @@ class Team:
                     -> """)
                     if choise == "1":
                         if self.nrRoll == None:
-                            self.rollAllTeam(nrRoll=2)
+                            self.rollAllTeam(self.name, nrRoll=2)
                         elif self.nrRoll == 2:
-                            self.rollAllTeam(nrRoll=3)
+                            self.rollAllTeam(self.name, nrRoll=3)
 
                     elif choise == "2":
                         holdList = []
@@ -427,9 +427,9 @@ class Team:
                     -> """)
                     if choise == "1":
                         if self.nrRoll == None:
-                            self.rollAllTeam(nrRoll=2)
+                            self.rollAllTeam(self.name, nrRoll=2)
                         elif self.nrRoll == 2:
-                            self.rollAllTeam(nrRoll=3)
+                            self.rollAllTeam(self.name, nrRoll=3)
 
                     elif choise == "2":
                         holdList = []
@@ -455,8 +455,8 @@ class Team:
 
                     elif choise == "3":
                         go = Auswertung(dicelist)
-                        for i in sorted(self.points):
-                            print((i, self.points[i]), end=" ")
+                        for i in sorted(self.teamPoints):
+                            print((i, self.teamPoints[i]), end=" ")
                         output = go.back(pokerJaNein)
                         self.schreibenTeam(output[0], output[1], dicelist, self.nrRoll)
                         break
@@ -465,8 +465,8 @@ class Team:
 
             elif self.nrRoll == 3:
                 go = Auswertung(dicelist)
-                for i in sorted(self.points):
-                    print((i, self.points[i]), end=" ")
+                for i in sorted(self.teamPoints):
+                    print((i, self.teamPoints[i]), end=" ")
                 output = go.back(pokerJaNein)
                 self.schreibenTeam(output[0], output[1], dicelist, self.nrRoll)
                 break
@@ -493,7 +493,7 @@ class Team:
             sumTop = 0
             for i in range(1,7):
                 i = str(i)
-                sumTop += self.selfPoints[i]
+                sumTop += self.teamPoints[i]
                 if sumTop >= 60:
                     sumTop += 30
             self.selfPoints["sumTop"] = sumTop
@@ -574,15 +574,21 @@ if configList[0] != 4:
 else: #define teams if playercount == 4; 2v2 Mode
     team1 = Team("Team 1")
     team2 = Team("Team 2")
-
+    print("Team 1:", startList[0], startList[2])
+    print("Team 2:", startList[1], startList[3]
+    )
     #execution of rolls
     rolls = 0
     while rolls != 12:
         for i in range(0,configList[0]):
-            print("-------------------------------------------------")
+            print("#########################NEUE RUNDE#########################")
             print("Durchgang", rolls+1, "von total", configList[2])
             team1.rollAllTeam(startList[0])
+            print("#########################NÄCHSTER SPIELER#########################")
             team2.rollAllTeam(startList[1])
+            print("#########################NÄCHSTER SPIELER#########################")
             team1.rollAllTeam(startList[2])
+            print("#########################NÄCHSTER SPIELER#########################")
             team2.rollAllTeam(startList[3])
+            print("#########################NÄCHSTER SPIELER#########################")
             rolls += 1

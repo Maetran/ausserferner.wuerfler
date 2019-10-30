@@ -63,7 +63,7 @@ class Auswertung:
     def back(self, pokerJaNein=None):
         while True:
             try:
-                print("Was schreiben: ", end= " ")
+                print("\nWas schreiben: ", end= " ")
                 select = input("1, 2, 3, 4, 5, 6, max, min, kenter, full, poker, sixty: ->")
                 list = ["1", "2", "3", "4", "5", "6"]
                 if select in list:
