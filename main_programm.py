@@ -104,15 +104,14 @@ class Player:
             print("\n", self.name + ", das ist dein ZWEITER Wurf:", end=" ")
             for item in holdlist:
                 print(item, end=" ")
-
+            print("\n")
             self.analyse(holdlist, 2, pokerJaNein)
 
         if nrRoll == 3:
             print("\n", self.name + ", das ist dein DRITTER Wurf:", end=" ")
             for item in holdlist:
                 print(item, end=" ")
-            print("")
-
+            print("\n")
             self.analyse(holdlist, 3)
 
     #analyse rolls
@@ -320,17 +319,17 @@ class Team:
             print("\n" + self.name + ", das ist dein ERSTER Wurf:", end=" ")
             for item in dicelist:
                 print(item, end=" ")
-
+            print("\n")
         elif self.nrRoll == 2:
             print("\n" + self.name + ", das ist dein ZWEITER Wurf:", end=" ")
             for item in dicelist:
                 print(item, end=" ")
-
+            print("\n")
         else:
             print("\n" + self.name + ", das ist dein DRITTER Wurf:", end=" ")
             for item in dicelist:
                 print(item, end=" ")
-
+            print("\n")
         self.analyseTeam(dicelist, nrRoll)
 
     #roll specific dice
@@ -350,15 +349,14 @@ class Team:
             print("\n", self.name + ", das ist dein ZWEITER Wurf:", end=" ")
             for item in holdlist:
                 print(item, end=" ")
-
+            print("\n")
             self.analyseTeam(holdlist, 2, pokerJaNein)
 
         if nrRoll == 3:
             print("\n", self.name + ", das ist dein DRITTER Wurf:", end=" ")
             for item in holdlist:
                 print(item, end=" ")
-            print("")
-
+            print("\n")
             self.analyseTeam(holdlist, 3)
 
     #analyse rolls
@@ -496,8 +494,8 @@ class Team:
                 sumTop += self.teamPoints[i]
                 if sumTop >= 60:
                     sumTop += 30
-            self.selfPoints["sumTop"] = sumTop
-            self.selfWrote.append("sumTop")
+            self.teamPoints["sumTop"] = sumTop
+            self.teamWrote.append("sumTop")
             print("Punkte oben", sumTop)
         else:
             None
@@ -541,6 +539,9 @@ class Team:
         else:
             pass #singleplayer
 
+    def endergebnis(self):
+        return self.teamPoints["sumAll"]
+
 ############################################################
 ##################EXECUTION STARTS HERE#####################
 
@@ -579,10 +580,10 @@ else: #define teams if playercount == 4; 2v2 Mode
     )
     #execution of rolls
     rolls = 0
-    while rolls != 12:
+    while rolls != 6:
         for i in range(0,configList[0]):
+            print("Durchgang", rolls+1, "von total", int(configList[2]/2))
             print("#########################NEUE RUNDE#########################")
-            print("Durchgang", rolls+1, "von total", configList[2])
             team1.rollAllTeam(startList[0])
             print("#########################NÄCHSTER SPIELER#########################")
             team2.rollAllTeam(startList[1])
@@ -592,3 +593,11 @@ else: #define teams if playercount == 4; 2v2 Mode
             team2.rollAllTeam(startList[3])
             print("#########################NÄCHSTER SPIELER#########################")
             rolls += 1
+
+    print("Spiel beendet")
+    print("Team 1 Gesamtpunktezahl:", )
+    print("Team 2 Gesamtpunktezahl:", )
+    erg1 = team1.endergebnis()
+    erg2 = team2.endergebnis()
+    if erg1 > erg: print("Team 1 gewinnt")
+    else: print("Team 2 gewinnt")
