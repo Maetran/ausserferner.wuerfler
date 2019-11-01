@@ -87,6 +87,46 @@ class Player:
             print("\n")
         self.analyse(dicelist, nrRoll)
 
+    def rollAllLast(self, nrRoll=None):
+
+        print("\nAktuelle Punkte von", self.name + ":", end="\n")
+        for i in sorted(self.points):
+            print((i, self.points[i]), end=" ")
+        print("\n")
+        #roll all dice and go to analyse
+        self.nrRoll = nrRoll
+        dicelist = []
+        for i in range(0,5):
+            wurf = random.randint(1,6)
+            dicelist.append(wurf)
+        dicelist.sort()
+        if self.nrRoll == None:
+            print("\n" + self.name + ", das ist dein ERSTER Wurf:", end=" ")
+            for item in dicelist:
+                print(item, end=" ")
+            print("\n")
+        elif self.nrRoll == 2:
+            print("\n" + self.name + ", das ist dein ZWEITER Wurf:", end=" ")
+            for item in dicelist:
+                print(item, end=" ")
+            print("\n")
+        elif self.nrRoll == 3:
+            print("\n" + self.name + ", das ist dein DRITTER Wurf:", end=" ")
+            for item in dicelist:
+                print(item, end=" ")
+            print("\n")
+        elif self.nrRoll == 4:
+            print("\n" + self.name + ", das ist dein VIERTER Wurf:", end=" ")
+            for item in dicelist:
+                print(item, end=" ")
+            print("\n")
+        else:
+            print("\n" + self.name + ", das ist dein LETZTER Wurf:", end=" ")
+            for item in dicelist:
+                print(item, end=" ")
+            print("\n")
+        self.analyseLast(dicelist, nrRoll)
+
     #roll specific dice
     def rollPart(self, holdlist, pokerJaNein, nrRoll=1):
         print("\nAktuelle Punkte von", self.name + ":", end="\n")
@@ -114,11 +154,49 @@ class Player:
             print("\n")
             self.analyse(holdlist, 3)
 
+    def rollPartLast(self, holdlist, nrRoll=1):
+        print("\nAktuelle Punkte von", self.name + ":", end="\n")
+        for i in sorted(self.points):
+            print((i, self.points[i]), end=" ")
+        print("\n")
+        self.nrRoll = nrRoll
+        toRoll = len(holdlist)
+        for i in range(0,5-toRoll):
+            wurf = random.randint(1,6)
+            holdlist.append(wurf)
+        holdlist.sort()
+
+        if nrRoll == 2:
+            print("\n", self.name + ", das ist dein ZWEITER Wurf:", end=" ")
+            for item in holdlist:
+                print(item, end=" ")
+            print("\n")
+            self.analyseLast(holdlist, 2)
+
+        elif nrRoll == 3:
+            print("\n", self.name + ", das ist dein DRITTER Wurf:", end=" ")
+            for item in holdlist:
+                print(item, end=" ")
+            print("\n")
+            self.analyseLast(holdlist, 3)
+
+        elif nrRoll == 4:
+            print("\n", self.name + ", das ist dein VIERTER Wurf:", end=" ")
+            for item in holdlist:
+                print(item, end=" ")
+            print("\n")
+            self.analyseLast(holdlist, 4)
+        else:
+            print("\n", self.name + ", das ist dein LETZTER Wurf:", end=" ")
+            for item in holdlist:
+                print(item, end=" ")
+            print("\n")
+            self.analyseLast(holdlist, 5)
+
     #analyse rolls
     def analyse(self, dicelist, nrRoll, pokerJaNein=None):
         self.nrRoll = nrRoll
         while True:
-            # try:
             if self.nrRoll == None:
                 try:
                     choise = input("""\nWas willst du machen: \n
@@ -217,6 +295,175 @@ class Player:
                     raise("Fehler bei Analyse Roll 2")
 
             elif self.nrRoll == 3:
+                go = Auswertung(dicelist)
+                for i in sorted(self.points):
+                    print((i, self.points[i]), end=" ")
+                output = go.back(pokerJaNein)
+                self.schreiben(output[0], output[1], dicelist, self.nrRoll)
+                break
+            else:
+                raise
+            break
+
+    #analyse rolls
+    def analyseLast(self, dicelist, nrRoll):
+        self.nrRoll = nrRoll
+        while True:
+            if self.nrRoll == None:
+                try:
+                    choise = input("""\nWas willst du machen: \n
+                    1: Alle neu werfen
+                    2. Einzelne halten [Position angeben 1-5]
+                    3. Anschreiben
+                    4. Angesagt
+                    -> """)
+                    if choise == "1":
+                        if self.nrRoll == None:
+                            self.rollAllLast(nrRoll=2)
+                        elif self.nrRoll == 2:
+                            self.rollAllLast(nrRoll=3)
+
+                    elif choise == "2":
+                        holdList = []
+                        index = ["1","2","3","4","5"]
+                        hold = input("Was willst du halten: -> ")
+                        for item in hold:
+                            if item in index:
+                                item = int(item)
+                                holdList.append(dicelist[item-1])
+                            else:
+                                continue
+                        self.rollPartLast(holdList, nrRoll=2)
+
+                    elif choise == "3":
+                        go = Auswertung(dicelist)
+                        for i in sorted(self.points):
+                            print((i, self.points[i]), end=" ")
+                        output = go.back()
+                        self.schreiben(output[0], output[1], dicelist, self.nrRoll)
+                        break
+
+                    elif choise == "4":
+                        print("Angesagt aktiviert")
+
+                    else:
+                        break
+                except:
+                    raise("Fehler bei Analyse Roll 1")
+
+            elif self.nrRoll == 2:
+                try:
+                    choise = input("""\nWas willst du machen: \n
+                    1: Alle neu werfen
+                    2. Einzelne halten [Position angeben 1-5]
+                    3. Anschreiben
+                    -> """)
+                    if choise == "1":
+                        if self.nrRoll == None:
+                            self.rollAllLast(nrRoll=2)
+                        elif self.nrRoll == 2:
+                            self.rollAllLast(nrRoll=3)
+
+                    elif choise == "2":
+                        holdList = []
+                        index = ["1","2","3","4","5"]
+                        hold = input("Was willst du halten: -> ")
+                        for item in hold:
+                            if item in index:
+                                item = int(item)
+                                holdList.append(dicelist[item-1])
+                            else:
+                                continue
+                        self.rollPartLast(holdList, nrRoll=3,)
+
+                    elif choise == "3":
+                        go = Auswertung(dicelist)
+                        for i in sorted(self.points):
+                            print((i, self.points[i]), end=" ")
+                        output = go.back(pokerJaNein)
+                        self.schreiben(output[0], output[1], dicelist, self.nrRoll)
+                        break
+                except:
+                    raise("Fehler bei Analyse Roll 2")
+
+            elif self.nrRoll == 3:
+                try:
+                    choise = input("""\nWas willst du machen: \n
+                    1: Alle neu werfen
+                    2. Einzelne halten [Position angeben 1-5]
+                    3. Anschreiben
+                    -> """)
+                    if choise == "1":
+                        if self.nrRoll == None:
+                            self.rollAllLast(nrRoll=2)
+                        elif self.nrRoll == 2:
+                            self.rollAllLast(nrRoll=3)
+                        else:
+                            self.rollAllLast(nrRoll=4)
+
+                    elif choise == "2":
+                        holdList = []
+                        index = ["1","2","3","4","5"]
+                        hold = input("Was willst du halten: -> ")
+                        for item in hold:
+                            if item in index:
+                                item = int(item)
+                                holdList.append(dicelist[item-1])
+                            else:
+                                continue
+                        self.rollPartLast(holdList, nrRoll=4)
+
+                    elif choise == "3":
+                        go = Auswertung(dicelist)
+                        for i in sorted(self.points):
+                            print((i, self.points[i]), end=" ")
+                        output = go.back(pokerJaNein)
+                        self.schreiben(output[0], output[1], dicelist, self.nrRoll)
+                        break
+                except:
+                    raise("Fehler bei Analyse Roll 2")
+
+            elif self.nrRoll == 4:
+                try:
+                    choise = input("""\nWas willst du machen: \n
+                    1: Alle neu werfen
+                    2. Einzelne halten [Position angeben 1-5]
+                    3. Anschreiben
+                    -> """)
+                    if choise == "1":
+                        if self.nrRoll == None:
+                            self.rollAllLast(nrRoll=2)
+                        elif self.nrRoll == 2:
+                            self.rollAllLast(nrRoll=3)
+                        elif self.nrRoll == 3:
+                            self.rollAllLast(nrRoll=4)
+                        else:
+                            self.rollAllLast(nrRoll=5)
+
+                    elif choise == "2":
+                        holdList = []
+                        index = ["1","2","3","4","5"]
+                        hold = input("Was willst du halten: -> ")
+                        for item in hold:
+                            if item in index:
+                                item = int(item)
+                                holdList.append(dicelist[item-1])
+                            else:
+                                continue
+
+                        self.rollPartLast(holdList, nrRoll=5)
+
+                    elif choise == "3":
+                        go = Auswertung(dicelist)
+                        for i in sorted(self.points):
+                            print((i, self.points[i]), end=" ")
+                        output = go.back(pokerJaNein)
+                        self.schreiben(output[0], output[1], dicelist, self.nrRoll)
+                        break
+                except:
+                    raise("Fehler bei Analyse Roll 2")
+
+            elif self.nrRoll == 5:
                 go = Auswertung(dicelist)
                 for i in sorted(self.points):
                     print((i, self.points[i]), end=" ")
@@ -578,7 +825,7 @@ if configList[0] != 4:
             for i in range(0,configList[0]):
                 print("-------------------------------------------------")
                 print("Das ist dein letzter Wurf: du darfst 5x werfen")
-                startObjs[i].rollAll()
+                startObjs[i].rollAllLast()
                 rolls += 1
 
 else: #define teams if playercount == 4; 2v2 Mode
