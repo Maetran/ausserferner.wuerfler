@@ -566,11 +566,20 @@ if configList[0] != 4:
     #execution of rolls
     rolls = 0
     while rolls != 12:
-        for i in range(0,configList[0]):
-            print("-------------------------------------------------")
-            print("Durchgang", rolls+1, "von total", configList[2])
-            startObjs[i].rollAll()
-            rolls += 1
+        if rolls != 11:
+            for i in range(0,configList[0]):
+                print("-------------------------------------------------")
+                print("Durchgang", rolls+1, "von total", configList[2])
+                startObjs[i].rollAll()
+                rolls += 1
+
+        #lastroll = 5 rolls
+        else:
+            for i in range(0,configList[0]):
+                print("-------------------------------------------------")
+                print("Das ist dein letzter Wurf: du darfst 5x werfen")
+                startObjs[i].rollAll()
+                rolls += 1
 
 else: #define teams if playercount == 4; 2v2 Mode
     team1 = Team("Team 1")
