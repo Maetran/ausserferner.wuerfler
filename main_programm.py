@@ -1101,10 +1101,10 @@ else: #define teams if playercount == 4; 2v2 Mode
         rolls += 1
         print("Rolls", rolls)
 
-print("Spiel beendet")
-erg1 = team1.endergebnis()
-erg2 = team2.endergebnis()
-print("Team 1 Gesamtpunktezahl:", erg1)
-print("Team 2 Gesamtpunktezahl:", erg2)
-if erg1 > erg2: print("Team 1 gewinnt")
-else: print("Team 2 gewinnt")
+    print("Spiel beendet")
+    erg1 = team1.endergebnis()
+    erg2 = team2.endergebnis()
+    print("Team 1 Gesamtpunktezahl:", erg1)
+    print("Team 2 Gesamtpunktezahl:", erg2)
+    if erg1 > erg2: print("Team 1 gewinnt")
+    else: print("Team 2 gewinnt")
