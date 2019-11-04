@@ -14,6 +14,7 @@ async def index(request):
 async def print_message(sid,message):
     print("Socket ID:", sid)
     print("Nachricht", message)
+    await sio.emit('welcome', 'Ein herzliches Gruessgott vom server!')
 
 app.router.add_get("/", index)
 
