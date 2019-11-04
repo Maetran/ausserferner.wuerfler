@@ -10,6 +10,8 @@ Lerne die Regeln des Spieles, den Rest besorge ich ;) Wenn du mir helfen willst:
 ### Prerequisites
 
 Es soll keine Voraussetzungen geben. Ziel ist, dass dieses Projekt auf einem Webserver mit Benutzeroberfläche läuft und event. eine Responsive-Lösung angeboten werden kann.
+- apt-get install python3-pip
+- pip3 install aiohttp python-socketio
 
 ## Deployment
 
